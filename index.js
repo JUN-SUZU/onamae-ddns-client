@@ -6,8 +6,8 @@ const config = require('./config.json');
 const interval = 1800;
 const userId = config.userId;
 const password = config.password;
-const hostnames = ['www', 'hogehoge'];
-const domain = 'example.com';
+const hostnames = ['grafana', 'mc', 'app', 'mail', 'mindos', 'mirai', 'omniways', 'proxmox', 'sam'];
+const domain = 'jun-suzu.net';
 
 // get IPv4 address
 function getIPv4() {
@@ -81,3 +81,7 @@ function updateDNS(ip) {
 }
 
 getIPv4();
+
+setInterval(() => {
+    getIPv4();
+}, interval * 1000);
