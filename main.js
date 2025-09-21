@@ -85,7 +85,6 @@ async function refreshDNS(hostname, domain, ip) {
             socket: connection,
             servername: options.host,
         });
-        let loginned = false;
         let connecting = true;
         tlsSocket.on("end", () => {
             connecting = false;
@@ -93,7 +92,6 @@ async function refreshDNS(hostname, domain, ip) {
         const oDP = new onamaeDDNSProtocol(userId, password, hostname, domain, ip);
         if (connecting) {
             tlsSocket.write(oDP.login);
-            loginned = true;
         }
         if (connecting) tlsSocket.write(oDP.modip);
         if (connecting) tlsSocket.write(oDP.logout);
@@ -110,9 +108,8 @@ async function refreshDNS(hostname, domain, ip) {
 const updateDNS = async () => {
     const ip = await getIPv4();
     console.log("Current IP Address:", ip);
-    dnsList.forEach(dns => {
-        const domain = dns.shift();
-        dns.forEach(hostname => {
+    dnsList.forEach(([domain, ...hostnames]) => {
+        hostnames.forEach(hostname => {
             refreshDNS(hostname, domain, ip);
         });
     });
